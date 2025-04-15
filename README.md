@@ -11,7 +11,7 @@ The Full-Stack CRUD Application Client is built using React and Redux with clien
 - View detailed information on individual campuses and students.
 - Add, edit, and delete campuses and students using responsive forms with real-time validations.
 
-The client communicates with the back-end (available in a [Separate Repository](https://github.com/Galactic-Avenger/Full-Stack-CRUD-Application-client-front-end-) ) via RESTful API endpoints to ensure data consistency and seamless operation.
+The client communicates with the back-end (available in a [Separate Repository](https://github.com/Galactic-Avenger/Full-Stack-CRUD-Application-server-back-end-) ) via RESTful API endpoints to ensure data consistency and seamless operation.
 
 
 ## Team Members
