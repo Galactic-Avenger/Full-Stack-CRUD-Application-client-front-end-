@@ -2,7 +2,6 @@
 
 This is the main repository for the client (front-end) code for the Project - Full-Stack CRUD Application.
 
-----------
 ## Project-Overview
 The Full-Stack CRUD Application Client is built using React and Redux with client-side routing managed by React Router. This interface is designed for a Campus Management System that allows users to perform the following tasks:
 
