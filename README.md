@@ -4,7 +4,14 @@ This is the main repository for the client (front-end) code for the Project - Fu
 
 ----------
 ## Project-Overview
+The Full-Stack CRUD Application Client is built using React and Redux with client-side routing managed by React Router. This interface is designed for a Campus Management System that allows users to perform the following tasks:
 
+- View a visually appealing home page with navigation to view all campuses and all students.
+- Display lists of campuses and students.
+- View detailed information on individual campuses and students.
+- Add, edit, and delete campuses and students using responsive forms with real-time validations.
+
+The client communicates with the back-end (available in a [Separate Repository](https://github.com/Galactic-Avenger/Full-Stack-CRUD-Application-client-front-end-) ) via RESTful API endpoints to ensure data consistency and seamless operation.
 
 
 ## Team Members
