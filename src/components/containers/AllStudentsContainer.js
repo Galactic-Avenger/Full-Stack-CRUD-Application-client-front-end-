@@ -23,36 +23,39 @@ class AllStudentsContainer extends Component {
     this.props.fetchAllStudents();
   }
 
+  handleDelete = (studentId) => {
+    // Dispatch the thunk to delete a student
+    this.props.deleteStudent(studentId);
+  };
+
   // Render All Students view by passing all students data as props to the corresponding View component
-  render(){
-    return(
+  render() {
+    const { allStudents } = this.props;
+    return (
       <div>
         <Header />
+        {/* Pass both data and delete callback down to the View */}
         <AllStudentsView 
-          students={this.props.allStudents}
-          deleteStudent={this.props.deleteStudent}   
+          students={allStudents} 
+          deleteStudent={this.handleDelete} 
         />
       </div>
-    )
+    );
   }
 }
 
 // The following 2 input arguments are passed to the "connect" function used by "AllStudentsContainer" component to connect to Redux Store.
 // 1. The "mapState" argument specifies the data from Redux Store that the component needs.
 // The "mapState" is called when the Store State changes, and it returns a data object of "allStudents".
-const mapState = (state) => {
-  return {
+const mapState = (state) => ({
     allStudents: state.allStudents,  // Get the State object from Reducer "allStudents"
-  };
-};
+});
 // 2. The "mapDispatch" argument is used to dispatch Action (Redux Thunk) to Redux Store.
 // The "mapDispatch" calls the specific Thunk to dispatch its action. The "dispatch" is a function of Redux Store.
-const mapDispatch = (dispatch) => {
-  return {
+const mapDispatch = (dispatch) => ({
     fetchAllStudents: () => dispatch(fetchAllStudentsThunk()),
     deleteStudent: (studentId) => dispatch(deleteStudentThunk(studentId)),
-  };
-};
+  });
 
 // Export store-connected container by default
 // AllStudentsContainer uses "connect" function to connect to Redux Store and to read values from the Store 

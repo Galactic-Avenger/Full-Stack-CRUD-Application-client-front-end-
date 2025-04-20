@@ -11,12 +11,12 @@ const axios = require('axios');
 export const fetchAllCampusesThunk = () => async (dispatch) => {  // The THUNK
   try {
     // API "get" call to get "campuses" data from database
-    let res = await axios.get(`/api/campuses`);  
+    const res = await axios.get(`/api/campuses`);  
     // Call Action Creator to return Action object (type + payload with "campuses" data)
     // Then dispatch the Action object to Reducer to update state 
     dispatch(ac.fetchAllCampuses(res.data));
   } catch(err) {
-    console.error(err);
+    console.error('Error fetching campuses:', err);
   }
 };
 
@@ -25,10 +25,10 @@ export const fetchAllCampusesThunk = () => async (dispatch) => {  // The THUNK
 export const fetchCampusThunk = (id) => async (dispatch) => {  // The THUNK
   try {
     // API "get" call to get a student data (based on "id")from database
-    let res = await axios.get(`/api/campuses/${id}`);  
+    const res = await axios.get(`/api/campuses/${id}`);  
     dispatch(ac.fetchCampus(res.data));
   } catch(err) {
-    console.error(err);
+    console.error('Error fetching campus:', err);
   }
 };
 
@@ -37,12 +37,12 @@ export const fetchCampusThunk = (id) => async (dispatch) => {  // The THUNK
 export const fetchAllStudentsThunk = () => async (dispatch) => {  // The THUNK
   try {
     // API "get" call to get "students" data from database
-    let res = await axios.get(`/api/students`);  
+    const res = await axios.get(`/api/students`);  
     // Call Action Creator to return Action object (type + payload with "students" data)
     // Then dispatch the Action object to Reducer to update state 
     dispatch(ac.fetchAllStudents(res.data));  
   } catch(err) {
-    console.error(err);
+    console.error('Error fetching students:', err);
   }
 };
 
@@ -51,13 +51,13 @@ export const fetchAllStudentsThunk = () => async (dispatch) => {  // The THUNK
 export const addStudentThunk = (student) => async (dispatch) => {  // The THUNK
   try {
     // API "post" call to add "student" object's data to database
-    let res = await axios.post(`/api/students`, student);  
+    const res = await axios.post(`/api/students`, student);  
     // Call Action Creator to return Action object (type + payload with new students data)
     // Then dispatch the Action object to Reducer to update state 
     dispatch(ac.addStudent(res.data));
     return res.data;
   } catch(err) {
-    console.error(err);
+    console.error('Error adding student:', err);
   }
 };
 
@@ -70,20 +70,25 @@ export const deleteStudentThunk = studentId => async dispatch => {  // The THUNK
     // Delete successful so change state with dispatch
     dispatch(ac.deleteStudent(studentId));
   } catch(err) {
-    console.error(err);
+    console.error('Error deleting student:', err);
   }
 };
 
 // Edit Student
 // THUNK CREATOR:
-export const editStudentThunk = student => async dispatch => {  // The THUNK
+export const editStudentThunk = (student) => async (dispatch) => {
   try {
-    // API "put" call to update student (based on "id" and "student" object's data) from database
-    let updatedStudent = await axios.put(`/api/students/${student.id}`, student); 
-    // Update successful so change state with dispatch
-    dispatch(ac.editStudent(updatedStudent));
-  } catch(err) {
-    console.error(err);
+    // 1. Send PUT and pull the updated record from response.data
+    const response = await axios.put(`/api/students/${student.id}`, student);
+    const updated = response.data;
+
+    // 2. Dispatch only the updated student object (not the full response)
+    dispatch(ac.editStudent(updated));
+
+    // Return updated if you need to chain promises
+    return updated;
+  } catch (err) {
+    console.error('Error editing student:', err);
   }
 };
 
@@ -92,11 +97,11 @@ export const editStudentThunk = student => async dispatch => {  // The THUNK
 export const fetchStudentThunk = id => async dispatch => {  // The THUNK
   try {
     // API "get" call to get a specific student (based on "id") data from database
-    let res = await axios.get(`/api/students/${id}`);  
+    const res = await axios.get(`/api/students/${id}`);  
     // Call Action Creator to return Action object (type + payload with student data)
     // Then dispatch the Action object to Reducer to display student data 
     dispatch(ac.fetchStudent(res.data));
   } catch(err) {
-    console.error(err);
+    console.error('Error fetching student:', err);
   }
 };
