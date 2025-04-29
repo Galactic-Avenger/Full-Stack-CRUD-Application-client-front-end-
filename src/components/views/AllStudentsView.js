@@ -4,16 +4,19 @@ AllStudentsView.js
 The Views component is responsible for rendering web page with data provided by the corresponding Container component.
 It constructs a React component to display the all students view page.
 ================================================== */
+// Import react and necessary libraries
+import React from "react";
 import PropTypes from "prop-types";
 import { Link } from "react-router-dom";
 
+// Take in props data to construct the component
 const AllStudentsView = ({ students, deleteStudent }) => {
   // If there are no students yet, show a prompt
   if (!students.length) {
     return (
       <div>
         <p>There are no students.</p>
-        <Link to="/newstudent">
+        <Link to="/newstudent"> {/* Link to your "Add Student" form */}
           <button>Add New Student</button>
         </Link>
       </div>
@@ -31,7 +34,7 @@ const AllStudentsView = ({ students, deleteStudent }) => {
             <Link to={`/student/${student.id}`}>
               <h3>{student.firstName} {student.lastName}</h3>
             </Link>
-            {/* Delete button */}
+            {/* Delete student button */}
             <button onClick={() => deleteStudent(student.id)}>
               Delete
             </button>
@@ -50,10 +53,11 @@ const AllStudentsView = ({ students, deleteStudent }) => {
   );
 };
 
+// Validate data type of the props passed to component.
 AllStudentsView.propTypes = {
-  students: PropTypes.array.isRequired,
-  deleteStudent: PropTypes.func.isRequired,
+  students: PropTypes.array.isRequired, // Array of student objects
+  deleteStudent: PropTypes.func.isRequired, // Function to delete a student
 };
 
-
+// Export the component for use in other parts of the application
 export default AllStudentsView;

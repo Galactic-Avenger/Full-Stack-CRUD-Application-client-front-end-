@@ -5,6 +5,7 @@ The Container component is responsible for stateful logic and data fetching, and
 passes data (if any) as props to the corresponding View component.
 If needed, it also defines the component's "connect" function.
 ================================================== */
+// Import react and redux necessary libraries
 import Header from './Header';
 import { Component } from "react";
 import PropTypes from "prop-types";
@@ -12,7 +13,7 @@ import { connect } from "react-redux";
 import { fetchAllCampusesThunk } from "../../store/thunks";
 import AllCampusesView from "../views/AllCampusesView";
 
-
+// The AllCampusesContainer component is a container component that fetches all campuses data
 class AllCampusesContainer extends Component {
   // Get all campuses data from back-end database
   componentDidMount() {
@@ -43,13 +44,13 @@ const mapState = (state) => ({
 // 2. The "mapDispatch" argument is used to dispatch Action (Redux Thunk) to Redux Store.
 // The "mapDispatch" calls the specific Thunk to dispatch its action. The "dispatch" is a function of Redux Store.
 const mapDispatch = (dispatch) => ({
-    fetchAllCampuses: () => dispatch(fetchAllCampusesThunk()),
+    fetchAllCampuses: () => dispatch(fetchAllCampusesThunk()), // Fetch all campuses data from server side
 });
 
 // Type check props;
 AllCampusesContainer.propTypes = {
-  allCampuses: PropTypes.array.isRequired,
-  fetchAllCampuses: PropTypes.func.isRequired,
+  allCampuses: PropTypes.array.isRequired, // Array of all campuses
+  fetchAllCampuses: PropTypes.func.isRequired, // Function to fetch all campuses
 };
 
 // Export store-connected container by default
