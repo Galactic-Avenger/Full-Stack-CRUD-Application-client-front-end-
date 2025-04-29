@@ -5,24 +5,29 @@ The Container component is responsible for stateful logic and data fetching, and
 passes data (if any) as props to the corresponding View component.
 If needed, it also defines the component's "connect" function.
 ================================================== */
+// Import React redux and React Router DOM libraries
 import Header from './Header';
 import { Component } from 'react';
 import { connect } from 'react-redux';
 import { withRouter } from "react-router-dom";
 
+// Import Redux Store and Thunks
 import { 
   fetchAllStudentsThunk,
   deleteStudentThunk
 } from '../../store/thunks';
 
+// Import the View component
 import AllStudentsView from '../views/AllStudentsView';
 
+// Import the CSS file
 class AllStudentsContainer extends Component {
   // Get all students data from back-end database
   componentDidMount() {
-    this.props.fetchAllStudents();
+    this.props.fetchAllStudents(); 
   }
 
+  // Handle delete student action
   handleDelete = (studentId) => {
     // Dispatch the thunk to delete a student
     this.props.deleteStudent(studentId);
@@ -54,7 +59,7 @@ const mapState = (state) => ({
 // The "mapDispatch" calls the specific Thunk to dispatch its action. The "dispatch" is a function of Redux Store.
 const mapDispatch = (dispatch) => ({
     fetchAllStudents: () => dispatch(fetchAllStudentsThunk()),
-    deleteStudent: (studentId) => dispatch(deleteStudentThunk(studentId)),
+    deleteStudent: (studentId) => dispatch(deleteStudentThunk(studentId)), // Call the thunk to delete a student
   });
 
 // Export store-connected container by default
