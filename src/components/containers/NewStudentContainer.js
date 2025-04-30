@@ -11,7 +11,7 @@ import { connect } from 'react-redux';
 import { Redirect } from 'react-router-dom';
 
 import NewStudentView from '../views/NewStudentView';
-import { addStudentThunk } from '../../store/thunks';
+import { addStudentThunk, fetchAllCampusesThunk } from '../../store/thunks';
 
 class NewStudentContainer extends Component {
   // Initialize state
@@ -19,11 +19,20 @@ class NewStudentContainer extends Component {
     super(props);
     this.state = {
       firstname: "", 
-      lastname: "", 
-      campusId: null, 
+      lastname: "",
+      email: "",
+      gpa: "",
+      imageUrl: "",
+      campusId: "",
       redirect: false, 
-      redirectId: null
+      redirectId: null,
+      error: null
     };
+  }
+
+  // Fetch all campuses when component mounts
+  componentDidMount() {
+    this.props.fetchAllCampuses();
   }
 
   // Capture input data when it is entered
@@ -37,28 +46,58 @@ class NewStudentContainer extends Component {
   handleSubmit = async event => {
     event.preventDefault();  // Prevent browser reload/refresh after submit.
 
-    let student = {
+    try {
+      // Basic form validation
+      if (!this.state.firstname || !this.state.lastname || !this.state.email) {
+        this.setState({ error: "First name, last name, and email are required fields" });
+        return;
+      }
+
+      // Validate GPA is between 0 and 4.0
+      const gpa = parseFloat(this.state.gpa);
+      if (isNaN(gpa) || gpa < 0 || gpa > 4.0) {
+        this.setState({ error: "GPA must be a number between 0 and 4.0" });
+        return;
+      }
+
+      // Create student object to add
+      let student = {
         firstname: this.state.firstname,
         lastname: this.state.lastname,
-        campusId: this.state.campusId
-    };
-    
-    // Add new student in back-end database
-    let newStudent = await this.props.addStudent(student);
+        email: this.state.email,
+        gpa: gpa,
+        imageUrl: this.state.imageUrl || undefined, // Only include if provided
+        campusId: this.state.campusId || null // Use null if empty string
+      };
+      
+      // Add new student in back-end database
+      let newStudent = await this.props.addStudent(student);
 
-    // Update state, and trigger redirect to show the new student
-    this.setState({
-      firstname: "", 
-      lastname: "", 
-      campusId: null, 
-      redirect: true, 
-      redirectId: newStudent.id
-    });
+      if (newStudent && newStudent.id) {
+        // Update state, and trigger redirect to show the new student
+        this.setState({
+          firstname: "", 
+          lastname: "", 
+          email: "",
+          gpa: "",
+          imageUrl: "",
+          campusId: "",
+          redirect: true, 
+          redirectId: newStudent.id,
+          error: null
+        });
+      } else {
+        this.setState({ error: "Error adding student. Please try again." });
+      }
+    } catch (err) {
+      console.error(err);
+      this.setState({ error: "An error occurred. Please try again." });
+    }
   }
 
   // Unmount when the component is being removed from the DOM:
   componentWillUnmount() {
-      this.setState({redirect: false, redirectId: null});
+    this.setState({redirect: false, redirectId: null});
   }
 
   // Render new student input form
@@ -72,25 +111,39 @@ class NewStudentContainer extends Component {
     return (
       <div>
         <Header />
+        {this.state.error && (
+          <div style={{color: 'red', textAlign: 'center', marginBottom: '20px'}}>
+            {this.state.error}
+          </div>
+        )}
         <NewStudentView 
-          handleChange = {this.handleChange} 
-          handleSubmit={this.handleSubmit}      
+          handleChange={this.handleChange} 
+          handleSubmit={this.handleSubmit}
+          allCampuses={this.props.allCampuses} 
         />
       </div>          
     );
   }
 }
 
-// The following input argument is passed to the "connect" function used by "NewStudentContainer" component to connect to Redux Store.
+// The following input arguments are passed to the "connect" function used by "NewStudentContainer" component to connect to Redux Store.
+// The "mapState" argument is used to read values from the Redux Store and pass them as props
+const mapState = (state) => {
+  return {
+    allCampuses: state.allCampuses  // Get the State object from Reducer "allCampuses"
+  };
+};
+
 // The "mapDispatch" argument is used to dispatch Action (Redux Thunk) to Redux Store.
 // The "mapDispatch" calls the specific Thunk to dispatch its action. The "dispatch" is a function of Redux Store.
 const mapDispatch = (dispatch) => {
-    return({
-        addStudent: (student) => dispatch(addStudentThunk(student)),
-    })
-}
+  return {
+    addStudent: (student) => dispatch(addStudentThunk(student)),
+    fetchAllCampuses: () => dispatch(fetchAllCampusesThunk())
+  };
+};
 
 // Export store-connected container by default
 // NewStudentContainer uses "connect" function to connect to Redux Store and to read values from the Store 
 // (and re-read the values when the Store State updates).
-export default connect(null, mapDispatch)(NewStudentContainer);
+export default connect(mapState, mapDispatch)(NewStudentContainer);
