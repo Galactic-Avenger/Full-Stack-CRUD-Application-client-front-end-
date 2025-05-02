@@ -11,6 +11,24 @@ export const fetchAllCampuses = (campuses) => ({
   payload: campuses, // array of campuses
 });
 
+// Add Campus
+export const addCampus = (campus) => ({
+  type: at.ADD_CAMPUS,
+  payload: campus, // new campus object
+});
+
+// Delete Campus
+export const deleteCampus = (campusId) => ({
+  type: at.DELETE_CAMPUS,
+  payload: campusId, // campus ID to delete
+});
+
+// Edit Campus
+export const editCampus = (campus) => ({
+  type: at.EDIT_CAMPUS,
+  payload: campus, // campus object with updated data
+});
+
 // Single Campus
 export const fetchCampus = (campus) => ({
   type: at.FETCH_CAMPUS,
