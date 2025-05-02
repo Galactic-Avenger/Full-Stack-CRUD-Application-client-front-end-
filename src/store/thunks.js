@@ -22,11 +22,64 @@ export const fetchAllCampusesThunk = () => async (dispatch) => {  // The THUNK
   }
 };
 
+// Add Campus
+// THUNK CREATOR:
+export const addCampusThunk = (campus) => async (dispatch) => {  // The THUNK
+  try {
+    // API "post" call to add "campus" object's data to database
+    const res = await axios.post(`/api/campuses`, campus);  
+    // Call Action Creator to return Action object (type + payload with new campus data)
+    // Then dispatch the Action object to Reducer to update state 
+    dispatch(ac.addCampus(res.data));
+    return res.data; 
+  } 
+  // Handle error
+  catch(err) {
+    console.error('Error adding campus:', err);
+    throw err; // Re-throw the error so we can handle it in the component
+  }
+};
+
+// Delete Campus
+// THUNK CREATOR:
+export const deleteCampusThunk = campusId => async dispatch => {  // The THUNK
+  try {
+    // API "delete" call to delete campus (based on "campusId") from database
+    await axios.delete(`/api/campuses/${campusId}`);  
+    // Delete successful so change state with dispatch
+    dispatch(ac.deleteCampus(campusId));
+  }
+  // Handle error
+  catch(err) {
+    console.error('Error deleting campus:', err);
+  }
+};
+
+// Edit Campus
+// THUNK CREATOR:
+export const editCampusThunk = (campus) => async (dispatch) => {
+  try {
+    // Send PUT and pull the updated record from response.data
+    const response = await axios.put(`/api/campuses/${campus.id}`, campus);
+    const updated = response.data;
+
+    // Dispatch only the updated campus object (not the full response)
+    dispatch(ac.editCampus(updated));
+
+    // Return updated if you need to chain promises
+    return updated;
+  } 
+  // Handle error
+  catch (err) {
+    console.error('Error editing campus:', err);
+  }
+};
+
 // Single Campus
 // THUNK CREATOR:
 export const fetchCampusThunk = (id) => async (dispatch) => {  // The THUNK
   try {
-    // API "get" call to get a student data (based on "id")from database
+    // API "get" call to get a campus data (based on "id") from database
     const res = await axios.get(`/api/campuses/${id}`);  
     dispatch(ac.fetchCampus(res.data));
   } 
