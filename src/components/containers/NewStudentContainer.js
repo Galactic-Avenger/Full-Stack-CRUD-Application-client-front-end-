@@ -18,8 +18,8 @@ class NewStudentContainer extends Component {
   constructor(props){
     super(props);
     this.state = {
-      firstname: "", 
-      lastname: "",
+      firstName: "", 
+      lastName: "",
       email: "",
       gpa: "",
       imageUrl: "",
@@ -42,56 +42,58 @@ class NewStudentContainer extends Component {
     });
   }
 
-  // Take action after user click the submit button
   handleSubmit = async event => {
     event.preventDefault();  // Prevent browser reload/refresh after submit.
-
+  
     try {
       // Basic form validation
-      if (!this.state.firstname || !this.state.lastname || !this.state.email) {
+      if (!this.state.firstName || !this.state.lastName || !this.state.email) {
         this.setState({ error: "First name, last name, and email are required fields" });
         return;
       }
-
+  
       // Validate GPA is between 0 and 4.0
       const gpa = parseFloat(this.state.gpa);
       if (isNaN(gpa) || gpa < 0 || gpa > 4.0) {
         this.setState({ error: "GPA must be a number between 0 and 4.0" });
         return;
       }
-
+  
       // Create student object to add
       let student = {
-        firstname: this.state.firstname,
-        lastname: this.state.lastname,
+        firstName: this.state.firstName,
+        lastName: this.state.lastName,
         email: this.state.email,
         gpa: gpa,
-        imageUrl: this.state.imageUrl || undefined, // Only include if provided
+        imageUrl: this.state.imageUrl || null, // Use null instead of undefined
         campusId: this.state.campusId || null // Use null if empty string
       };
       
+      console.log("Sending student data:", student);
+      
       // Add new student in back-end database
       let newStudent = await this.props.addStudent(student);
-
-      if (newStudent && newStudent.id) {
-        // Update state, and trigger redirect to show the new student
-        this.setState({
-          firstname: "", 
-          lastname: "", 
-          email: "",
-          gpa: "",
-          imageUrl: "",
-          campusId: "",
-          redirect: true, 
-          redirectId: newStudent.id,
-          error: null
-        });
-      } else {
-        this.setState({ error: "Error adding student. Please try again." });
-      }
+      
+      console.log("Received response:", newStudent);
+      
+      // Update state, and trigger redirect to show the new student
+      this.setState({
+        firstName: "", 
+        lastName: "", 
+        email: "",
+        gpa: "",
+        imageUrl: "",
+        campusId: "",
+        redirect: true, 
+        redirectId: newStudent.id,
+        error: null
+      });
     } catch (err) {
-      console.error(err);
-      this.setState({ error: "An error occurred. Please try again." });
+      console.error("Error in handleSubmit:", err);
+      this.setState({ 
+        error: "Error adding student. Please try again." + 
+               (err.response?.data?.message ? ` (${err.response.data.message})` : "")
+      });
     }
   }
 
