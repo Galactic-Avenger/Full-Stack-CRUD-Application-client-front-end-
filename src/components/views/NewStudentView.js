@@ -72,7 +72,7 @@ const NewStudentView = (props) => {
             <TextField
               className={classes.formField}
               label="First Name"
-              name="firstname"
+              name="firstName"
               variant="outlined"
               onChange={(e) => handleChange(e)}
               required
@@ -81,7 +81,7 @@ const NewStudentView = (props) => {
             <TextField
               className={classes.formField}
               label="Last Name"
-              name="lastname"
+              name="lastName"
               variant="outlined"
               onChange={(e) => handleChange(e)}
               required

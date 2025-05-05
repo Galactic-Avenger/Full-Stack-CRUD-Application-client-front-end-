@@ -18,8 +18,8 @@ class NewStudentContainer extends Component {
   constructor(props){
     super(props);
     this.state = {
-      firstname: "", 
-      lastname: "",
+      firstName: "", 
+      lastName: "",
       email: "",
       gpa: "",
       imageUrl: "",
@@ -48,7 +48,7 @@ class NewStudentContainer extends Component {
 
     try {
       // Basic form validation
-      if (!this.state.firstname || !this.state.lastname || !this.state.email) {
+      if (!this.state.firstName || !this.state.lastName || !this.state.email) {
         this.setState({ error: "First name, last name, and email are required fields" });
         return;
       }
@@ -62,8 +62,8 @@ class NewStudentContainer extends Component {
 
       // Create student object to add
       let student = {
-        firstname: this.state.firstname,
-        lastname: this.state.lastname,
+        firstName: this.state.firstName,
+        lastName: this.state.lastName,
         email: this.state.email,
         gpa: gpa,
         imageUrl: this.state.imageUrl || undefined, // Only include if provided
@@ -76,8 +76,8 @@ class NewStudentContainer extends Component {
       if (newStudent && newStudent.id) {
         // Update state, and trigger redirect to show the new student
         this.setState({
-          firstname: "", 
-          lastname: "", 
+          firstName: "", 
+          lastName: "", 
           email: "",
           gpa: "",
           imageUrl: "",
