@@ -119,6 +119,7 @@ export const addStudentThunk = (student) => async (dispatch) => {  // The THUNK
   // Handle error
   catch(err) {
     console.error('Error adding student:', err);
+    throw err; // Re-throw the error so we can handle it in the component
   }
 };
 
