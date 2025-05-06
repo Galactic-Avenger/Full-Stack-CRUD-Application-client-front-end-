@@ -12,7 +12,7 @@ import { Link } from "react-router-dom";
 const StudentView = (props) => {
   const { student } = props; // student is an object containing student data
 
-  // Render a single Student view 
+  // Render a Single Student view 
   return (
     <div>
       <h1>{student.firstName + " " + student.lastName}</h1>
@@ -24,7 +24,10 @@ const StudentView = (props) => {
 ) : (
   <h3>This student is not enrolled in any campus.</h3>
 )}
-
+    {/* Edit Student button */}
+    <Link to={`/student/${student.id}/edit`}>
+        <button>Edit</button>
+      </Link>
     </div>
   );
 };
