@@ -11,6 +11,7 @@ import { Link } from "react-router-dom";
 
 const AllCampusesView = ({ allCampuses }) => (
   <div>
+    <h1>All Campuses</h1>
 
     {allCampuses.length === 0 ? (
       <p>There are no campuses yet.</p>
@@ -27,6 +28,9 @@ const AllCampusesView = ({ allCampuses }) => (
               width="200"
               height="150"
             />
+            <Link to={`/campus/${campus.id}/edit`} style={{ display: "block", margin: "0.25rem 0" }}>
+      <button>Edit</button>
+    </Link>
           </div>
         ))}
       </div>
