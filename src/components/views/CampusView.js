@@ -19,6 +19,14 @@ const CampusView = (props) => {
   <p>{campus.address}</p>
   <p>{campus.description}</p>
 
+  <Link to={`/campus/${campus.id}/edit`}>
+        <button>Edit</button>
+  </Link>
+
+  <Link to="/students">
+          <button>Manage Students</button>
+  </Link>
+
   {campus.students.length ? (
     campus.students.map((student) => ( // student is an object containing student data
       <div key={student.id}>
