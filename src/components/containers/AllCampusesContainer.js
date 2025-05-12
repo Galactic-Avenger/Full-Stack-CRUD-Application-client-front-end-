@@ -12,6 +12,7 @@ import PropTypes from "prop-types";
 import { connect } from "react-redux";
 import { fetchAllCampusesThunk } from "../../store/thunks";
 import AllCampusesView from "../views/AllCampusesView";
+import { deleteCampusThunk } from "../../store/thunks";
 
 // The AllCampusesContainer component is a container component that fetches all campuses data
 class AllCampusesContainer extends Component {
@@ -27,8 +28,8 @@ class AllCampusesContainer extends Component {
     return (
       <div>
         <Header />
-        {/* Pass the array of campuses down to the View for rendering */}
-        <AllCampusesView allCampuses={allCampuses} />
+        {/* Pass the array of campuses down to the View and delete for rendering */}
+        <AllCampusesView allCampuses={allCampuses} deleteCampus={this.props.deleteCampus} />
       </div>
     );
   }
@@ -45,6 +46,7 @@ const mapState = (state) => ({
 // The "mapDispatch" calls the specific Thunk to dispatch its action. The "dispatch" is a function of Redux Store.
 const mapDispatch = (dispatch) => ({
     fetchAllCampuses: () => dispatch(fetchAllCampusesThunk()), // Fetch all campuses data from server side
+    deleteCampus: (campusId) => dispatch(deleteCampusThunk(campusId)), // Delete a campus from server side
 });
 
 // Type check props;
