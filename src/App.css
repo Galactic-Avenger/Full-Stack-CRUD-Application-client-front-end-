@@ -1,3 +1,5 @@
+/* App.css */
+
 .App {
   background-color: beige;
   min-height: 100vh;
@@ -8,3 +10,74 @@
   color: #61dafb;
 }
 
+.error {
+  color: red;
+  font-size: 0.9em;
+  margin-top: 0.25rem;
+}
+
+/* Flexbox layout for the CampusView component */
+
+.campus-view-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 20px;
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+h1 {
+  margin-bottom: 10px;
+}
+
+p {
+  margin: 5px 0;
+}
+
+.button-container {
+  display: flex;
+  gap: 15px; /* Space between buttons */
+  margin-top: 20px;
+  justify-content: center; /* Center buttons */
+}
+
+button {
+  padding: 10px 20px;
+  font-size: 14px;
+  cursor: pointer;
+  border: none;
+  border-radius: 5px;
+}
+
+.edit-button {
+  background-color: #4CAF50;
+  color: white;
+}
+
+.manage-button {
+  background-color: #2196F3;
+  color: white;
+}
+
+.delete-button {
+  background-color: red;
+  color: white;
+}
+
+.student-list {
+  display: flex;
+  flex-direction: column;
+  margin-top: 20px;
+  width: 100%;
+  align-items: center;
+}
+
+.student-item {
+  margin-bottom: 10px;
+}
+
+.student-item h2 {
+  margin: 0;
+  font-size: 18px;
+}
