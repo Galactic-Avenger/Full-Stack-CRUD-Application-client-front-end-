@@ -1,5 +1,5 @@
 /*==================================================
-AllStudentsView.js
+// src/components/views/AllStudentsView.js
 
 The Views component is responsible for rendering web page with data provided by the corresponding Container component.
 It constructs a React component to display the all students view page.
@@ -38,9 +38,15 @@ const AllStudentsView = ({ students, deleteStudent }) => {
             <button onClick={() => deleteStudent(student.id)}>
               Delete
             </button>
+
+            {/* Edit student link */}
+            <Link to={`/student/${student.id}/edit`}>
+              <button>Edit</button>
+            </Link>
           </div>
         ))}
       </div>
+
 
       <br />
       {/* Link to your "Add Student" form */}

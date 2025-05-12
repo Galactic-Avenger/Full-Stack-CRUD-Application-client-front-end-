@@ -1,22 +1,22 @@
 /*==================================================
-// src/components/views/NewStudentView.js
+// src/components/views/EditStudentView.js
 
-The Views component is responsible for rendering web page with data provided by the corresponding Container component.
-It constructs a React component to display the new student page.
-================================================== */
-import Button from '@material-ui/core/Button';
-import Typography from '@material-ui/core/Typography';
-import { makeStyles } from '@material-ui/core/styles';
-import { Link } from 'react-router-dom';
-import TextField from '@material-ui/core/TextField';
-import MenuItem from '@material-ui/core/MenuItem';
-import FormControl from '@material-ui/core/FormControl';
-import InputLabel from '@material-ui/core/InputLabel';
-import Select from '@material-ui/core/Select';
-import FormHelperText from '@material-ui/core/FormHelperText';
-import React, { useState } from "react";
+This View component renders a styled form for editing a student's information.
+The input fields are pre-populated with existing student data.
+==================================================*/
+import React, { useState, useEffect } from "react";
+import { Link } from "react-router-dom";
+import Button from "@material-ui/core/Button";
+import Typography from "@material-ui/core/Typography";
+import { makeStyles } from "@material-ui/core/styles";
+import TextField from "@material-ui/core/TextField";
+import MenuItem from "@material-ui/core/MenuItem";
+import FormControl from "@material-ui/core/FormControl";
+import InputLabel from "@material-ui/core/InputLabel";
+import Select from "@material-ui/core/Select";
+import FormHelperText from "@material-ui/core/FormHelperText";
 
-// Create styling for the input form
+// Custom Styling
 const useStyles = makeStyles(() => ({
   formContainer: {
     width: "500px",
@@ -25,15 +25,6 @@ const useStyles = makeStyles(() => ({
     margin: "auto",
     padding: "20px",
     boxShadow: "0px 0px 5px 0px rgba(0,0,0,0.15)",
-  },
-  title: {
-    flexGrow: 1,
-    textAlign: "left",
-    textDecoration: "none",
-  },
-  customizeAppBar: {
-    backgroundColor: "#11153e",
-    shadows: ["none"],
   },
   formTitle: {
     backgroundColor: "#c5c8d6",
@@ -59,9 +50,10 @@ const useStyles = makeStyles(() => ({
   },
 }));
 
-const NewStudentView = ({ onSubmit, allCampuses }) => {
+const EditStudentView = ({ student, allCampuses, onSubmit }) => {
   const classes = useStyles();
 
+  // State to manage form fields
   const [formData, setFormData] = useState({
     firstName: "",
     lastName: "",
@@ -71,79 +63,130 @@ const NewStudentView = ({ onSubmit, allCampuses }) => {
     campusId: "",
   });
 
+  // Validation errors
   const [errors, setErrors] = useState({});
 
+  // Populate initial data when student loads
+  useEffect(() => {
+    if (student) {
+      setFormData({
+        firstName: student.firstName || "",
+        lastName: student.lastName || "",
+        email: student.email || "",
+        gpa: student.gpa || "",
+        imageUrl: student.imageUrl || "",
+        campusId: student.campusId || "",
+      });
+    }
+  }, [student]);
+
+  // Real-time validation logic
   const validate = (name, value) => {
     let error = "";
-    if (["firstName", "lastName"].includes(name) && !value.trim()) {
-      error = "This field is required.";
-    } else if (name === "email") {
-      if (!value.trim()) error = "Email is required.";
-      else if (!/\S+@\S+\.\S+/.test(value)) error = "Invalid email format.";
-    } else if (name === "gpa") {
-      const gpa = parseFloat(value);
-      if (value && (isNaN(gpa) || gpa < 0 || gpa > 4)) {
-        error = "GPA must be between 0.0 and 4.0.";
-      }
+
+    switch (name) {
+      case "firstName":
+      case "lastName":
+        if (!value.trim()) error = "This field is required.";
+        break;
+      case "email":
+        if (!value.trim()) {
+          error = "Email is required.";
+        } else if (!/\S+@\S+\.\S+/.test(value)) {
+          error = "Invalid email format.";
+        }
+        break;
+      case "gpa":
+        const gpa = parseFloat(value);
+        if (value && (isNaN(gpa) || gpa < 0 || gpa > 4)) {
+          error = "GPA must be between 0.0 and 4.0.";
+        }
+        break;
+      default:
+        break;
     }
+
     return error;
   };
 
+  // Handle input changes
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
 
     const error = validate(name, value);
-    setErrors((prev) => {
-      const updated = { ...prev };
-      if (error) updated[name] = error;
-      else delete updated[name];
-      return updated;
-    });
+    setErrors((prev) => ({ ...prev, [name]: error }));
   };
 
+  // Submit handler
   const handleSubmit = (e) => {
     e.preventDefault();
-
-    const newErrors = {};
-    Object.entries(formData).forEach(([key, value]) => {
-      const error = validate(key, value);
-      if (error) newErrors[key] = error;
+    const validationErrors = {};
+    Object.entries(formData).forEach(([key, val]) => {
+      const error = validate(key, val);
+      if (error) validationErrors[key] = error;
     });
-
-    setErrors(newErrors);
-    if (Object.keys(newErrors).length > 0) return;
-
-    onSubmit(formData); // Send clean data to container
+    setErrors(validationErrors);
+    if (Object.keys(validationErrors).length === 0) {
+      onSubmit(formData);
+    }
   };
 
+  // Form UI rendering
   return (
     <div>
-      <h1>Add Student View</h1>
+      <h1>Edit Student</h1>
       <div className={classes.root}>
         <div className={classes.formContainer}>
           <div className={classes.formTitle}>
             <Typography style={{ fontWeight: "bold", fontFamily: "Courier, sans-serif", fontSize: "20px", color: "#11153e" }}>
-              Add Student
+              Update Student Info
             </Typography>
           </div>
+
           <form onSubmit={handleSubmit}>
-            <TextField className={classes.formField} label="First Name" name="firstName" variant="outlined" onChange={handleChange} />
+            <TextField
+              className={classes.formField}
+              label="First Name"
+              name="firstName"
+              variant="outlined"
+              value={formData.firstName}
+              onChange={handleChange}
+              required
+            />
             {errors.firstName && <div className={classes.errorText}>{errors.firstName}</div>}
 
-            <TextField className={classes.formField} label="Last Name" name="lastName" variant="outlined" onChange={handleChange} />
+            <TextField
+              className={classes.formField}
+              label="Last Name"
+              name="lastName"
+              variant="outlined"
+              value={formData.lastName}
+              onChange={handleChange}
+              required
+            />
             {errors.lastName && <div className={classes.errorText}>{errors.lastName}</div>}
 
-            <TextField className={classes.formField} label="Email" name="email" variant="outlined" type="email" onChange={handleChange} />
+            <TextField
+              className={classes.formField}
+              label="Email"
+              name="email"
+              type="email"
+              variant="outlined"
+              value={formData.email}
+              onChange={handleChange}
+              required
+            />
             {errors.email && <div className={classes.errorText}>{errors.email}</div>}
 
             <TextField
               className={classes.formField}
               label="GPA"
               name="gpa"
-              variant="outlined"
               type="number"
               inputProps={{ step: "0.1", min: "0", max: "4.0" }}
+              variant="outlined"
+              value={formData.gpa}
               onChange={handleChange}
               helperText="Enter a value between 0.0 and 4.0"
             />
@@ -154,6 +197,7 @@ const NewStudentView = ({ onSubmit, allCampuses }) => {
               label="Image URL"
               name="imageUrl"
               variant="outlined"
+              value={formData.imageUrl}
               onChange={handleChange}
               helperText="Optional: Enter image URL"
             />
@@ -162,7 +206,6 @@ const NewStudentView = ({ onSubmit, allCampuses }) => {
               <InputLabel id="campus-select-label">Campus</InputLabel>
               <Select
                 labelId="campus-select-label"
-                id="campus-select"
                 name="campusId"
                 value={formData.campusId}
                 onChange={handleChange}
@@ -182,10 +225,10 @@ const NewStudentView = ({ onSubmit, allCampuses }) => {
             </FormControl>
 
             <div className={classes.buttonContainer}>
-              <Button variant="contained" color="primary" type="submit" disabled={Object.keys(errors).length > 0}>
-                Submit
+              <Button variant="contained" color="primary" type="submit">
+                Update Student
               </Button>
-              <Button component={Link} to="/students" variant="contained">
+              <Button component={Link} to={`/students`} variant="contained">
                 Cancel
               </Button>
             </div>
@@ -196,4 +239,4 @@ const NewStudentView = ({ onSubmit, allCampuses }) => {
   );
 };
 
-export default NewStudentView;
+export default EditStudentView;
