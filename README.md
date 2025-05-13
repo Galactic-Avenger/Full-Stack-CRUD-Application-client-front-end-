@@ -19,9 +19,6 @@ The client communicates with the back-end (available in a [Separate Repository](
 - **Leo Chen** - GitHub: @lc6003
 
   
-### Live Link 
-[Website link](https://Galactic-Avenger.github.io/Full-Stack-CRUD-Application-client-front-end-/)
-
 ----------
 ### 1. Set up and run the client (front-end) application on your local machine
 1.	Start a terminal (e.g., Git Bash) on your local machine.
