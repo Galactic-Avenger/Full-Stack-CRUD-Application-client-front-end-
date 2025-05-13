@@ -1,6 +1,5 @@
 /*==================================================
-StudentView.js
-
+// src/components/views/StudentView.js
 The Views component is responsible for rendering web page with data provided by the corresponding Container component.
 It constructs a React component to display the single student view page.
 ================================================== */
@@ -10,15 +9,14 @@ import { Link } from "react-router-dom";
 
 // Take in props data to construct the component
 const StudentView = (props) => {
-  const { student } = props; // student is an object containing student data
+  const { student, deleteStudent} = props; // student is an object containing student data
 
   // Render a Single Student view 
   return (
     <div>
       <h1>{student.firstName + " " + student.lastName}</h1>
-      {student.campus ? (
+      {student && student.campus && student.campus.id ? (
   <h3>
-    {/* Link into the Single Campus page */}
     Campus: <Link to={`/campus/${student.campus.id}`}>{student.campus.name}</Link>
   </h3>
 ) : (
@@ -28,6 +26,8 @@ const StudentView = (props) => {
     <Link to={`/student/${student.id}/edit`}>
         <button>Edit</button>
       </Link>
+      {/*  Delete Button */}
+      <button onClick={() => deleteStudent(student.id)}>Delete Student</button>
     </div>
   );
 };

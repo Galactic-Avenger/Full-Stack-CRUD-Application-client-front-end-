@@ -1,5 +1,5 @@
 /*==================================================
-EditStudentView.js
+// src/components/views/EditStudentView.js
 
 This View component renders a styled form for editing a student's information.
 The input fields are pre-populated with existing student data.
@@ -17,35 +17,36 @@ import Select from "@material-ui/core/Select";
 import FormHelperText from "@material-ui/core/FormHelperText";
 
 // Custom Styling
-const useStyles = makeStyles(() => ({
+const useStyles = makeStyles((theme) => ({
   formContainer: {
-    width: "500px",
-    backgroundColor: "#f0f0f5",
-    borderRadius: "5px",
-    margin: "auto",
-    padding: "20px",
-    boxShadow: "0px 0px 5px 0px rgba(0,0,0,0.15)",
+    width: "100%",
+    maxWidth: "600px",
+    backgroundColor: "#ffffff",
+    borderRadius: "12px",
+    margin: "30px auto",
+    padding: "30px 40px",
+    boxShadow: "0 6px 16px rgba(0,0,0,0.08)",
   },
   formTitle: {
-    backgroundColor: "#c5c8d6",
-    marginBottom: "15px",
+    backgroundColor: "#2E3A59",
+    marginBottom: "25px",
     textAlign: "center",
-    borderRadius: "5px 5px 0px 0px",
-    padding: "10px",
+    borderRadius: "10px 10px 0 0",
+    padding: "15px",
   },
   formField: {
-    marginBottom: "15px",
+    marginBottom: "20px",
     width: "100%",
   },
   buttonContainer: {
-    marginTop: "20px",
+    marginTop: "30px",
     display: "flex",
     justifyContent: "space-between",
   },
   errorText: {
     color: "red",
-    fontSize: "0.9em",
-    marginTop: "-10px",
+    fontSize: "0.85rem",
+    marginTop: "-8px",
     marginBottom: "10px",
   },
 }));
@@ -121,14 +122,21 @@ const EditStudentView = ({ student, allCampuses, onSubmit }) => {
   // Submit handler
   const handleSubmit = (e) => {
     e.preventDefault();
+  
     const validationErrors = {};
     Object.entries(formData).forEach(([key, val]) => {
       const error = validate(key, val);
       if (error) validationErrors[key] = error;
     });
+  
     setErrors(validationErrors);
+  
     if (Object.keys(validationErrors).length === 0) {
-      onSubmit(formData);
+      const finalData = {
+        ...formData,
+        campusId: formData.campusId === "" ? null : formData.campusId, // ✅ THIS LINE
+      };
+      onSubmit(finalData);
     }
   };
 
@@ -139,7 +147,7 @@ const EditStudentView = ({ student, allCampuses, onSubmit }) => {
       <div className={classes.root}>
         <div className={classes.formContainer}>
           <div className={classes.formTitle}>
-            <Typography style={{ fontWeight: "bold", fontFamily: "Courier, sans-serif", fontSize: "20px", color: "#11153e" }}>
+            <Typography style={{ fontWeight: 700, fontFamily: "'Merriweather', serif", fontSize: "22px", color: "#ffffff", }}>
               Update Student Info
             </Typography>
           </div>

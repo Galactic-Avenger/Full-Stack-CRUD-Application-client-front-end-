@@ -1,3 +1,10 @@
+/*==================================================
+// src/components/containers/EditStudentContainer.js
+//
+// The Container component fetches student data and passes it
+// to the EditStudentView for rendering and updates.
+==================================================*/
+
 import React, { useEffect } from "react"; // Import React and useEffect hook
 import { useDispatch, useSelector } from "react-redux"; // Redux hooks for dispatching actions and accessing state
 import { useParams, useHistory } from "react-router-dom";  // Import Redux thunk functions for fetching and editing a student

@@ -1,6 +1,5 @@
 /*==================================================
-AllStudentsView.js
-
+// src/components/views/AllStudentsView.js
 The Views component is responsible for rendering web page with data provided by the corresponding Container component.
 It constructs a React component to display the all students view page.
 ================================================== */
@@ -32,14 +31,21 @@ const AllStudentsView = ({ students, deleteStudent }) => {
           <div key={student.id} className="student-item">
             {/* Link into the Single Student page */}
             <Link to={`/student/${student.id}`}>
-              <h3>{student.firstName} {student.lastName}</h3>
+            <img
+              src={student.imageUrl || "/default-student.png"}
+              alt={`${student.firstName} ${student.lastName}`}
+              width="120"
+              height="120"
+              style={{ borderRadius: "50%", objectFit: "cover", marginBottom: "10px" }}
+            />
+            <h3>{student.firstName} {student.lastName}</h3>
             </Link>
             {/* Delete student button */}
             <button onClick={() => deleteStudent(student.id)}>
               Delete
             </button>
 
-            {/* ✅ Edit student link */}
+            {/* Edit student link */}
             <Link to={`/student/${student.id}/edit`}>
               <button>Edit</button>
             </Link>

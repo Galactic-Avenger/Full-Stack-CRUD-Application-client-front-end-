@@ -1,3 +1,9 @@
+/*==================================================
+// src/components/containers/EditCampusContainer.js
+//
+// The Container component fetches campus data and passes it
+// to the EditCampusView for rendering and updates.
+==================================================*/
 
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
