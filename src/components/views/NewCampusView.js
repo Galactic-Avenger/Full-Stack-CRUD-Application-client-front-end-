@@ -45,7 +45,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const NewCampusView = (props) => {
+const NewCampusView = (props) => {//new campusview component
   const { 
     handleChange, 
     handleSubmit,

@@ -50,10 +50,10 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const NewStudentView = ({ onSubmit, allCampuses }) => {
+const NewStudentView = ({ onSubmit, allCampuses }) => {//new student view component
   const classes = useStyles();
 
-  const [formData, setFormData] = useState({
+  const [formData, setFormData] = useState({//state for form fields
     firstName: "",
     lastName: "",
     email: "",
@@ -62,9 +62,9 @@ const NewStudentView = ({ onSubmit, allCampuses }) => {
     campusId: "",
   });
 
-  const [errors, setErrors] = useState({});
+  const [errors, setErrors] = useState({});//state for input validation errors
 
-  const validate = (name, value) => {
+  const validate = (name, value) => {//validates individual input field
     let error = "";
     if (["firstName", "lastName"].includes(name) && !value.trim()) {
       error = "This field is required.";
@@ -80,7 +80,7 @@ const NewStudentView = ({ onSubmit, allCampuses }) => {
     return error;
   };
 
-  const handleChange = (e) => {
+  const handleChange = (e) => {//updates data and triggers
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
 
@@ -93,7 +93,7 @@ const NewStudentView = ({ onSubmit, allCampuses }) => {
     });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = (e) => {//validates all fields on submit 
     e.preventDefault();
 
     const newErrors = {};
@@ -105,7 +105,7 @@ const NewStudentView = ({ onSubmit, allCampuses }) => {
     setErrors(newErrors);
     if (Object.keys(newErrors).length > 0) return;
 
-    onSubmit(formData); // Send clean data to container
+    onSubmit(formData); // submit validated data 
   };
 
   return (

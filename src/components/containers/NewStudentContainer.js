@@ -16,7 +16,7 @@ import { addStudentThunk, fetchAllCampusesThunk } from '../../store/thunks';
 class NewStudentContainer extends Component {
   constructor(props){
     super(props);
-    this.state = {
+    this.state = {// Local component state to track redirection and error messages
       redirect: false,
       redirectId: null,
       error: null
@@ -27,23 +27,23 @@ class NewStudentContainer extends Component {
     this.props.fetchAllCampuses();
   }
 
-  handleSubmit = async (formData) => {
+  handleSubmit = async (formData) => {//handles submittion of new student form
     try {
-      const gpa = parseFloat(formData.gpa);
+      const gpa = parseFloat(formData.gpa);//valid gpa input 
       if (isNaN(gpa) || gpa < 0 || gpa > 4.0) {
         this.setState({ error: "GPA must be a number between 0 and 4.0" });
         return;
       }
 
-      const student = {
+      const student = {//build student object for submission 
         ...formData,
         gpa,
         imageUrl: formData.imageUrl || null,
         campusId: formData.campusId ? parseInt(formData.campusId) : null
       };
 
-      const newStudent = await this.props.addStudent(student);
-      if (newStudent && newStudent.id) {
+      const newStudent = await this.props.addStudent(student);//dispatch action to add student to database
+      if (newStudent && newStudent.id) {//redirect on success
         this.setState({
           redirect: true,
           redirectId: newStudent.id,
@@ -59,7 +59,7 @@ class NewStudentContainer extends Component {
   };
 
   render() {
-    if (this.state.redirect) {
+    if (this.state.redirect) {// Redirect to the new student's individual page
       return <Redirect to={`/student/${this.state.redirectId}`} />;
     }
 
